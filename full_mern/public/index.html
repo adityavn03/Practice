@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input id="email-signup">
+        <input id="password-signup">
+        <button onclick="signup()">signup</button>
+    </div>
+
+    <div>
+        <input id="email-signin">
+        <input id="password-signin">
+        <button onclick="signin()">signin</button>
+    </div>
+
+    <div>
+        <p id="user-details">user name and password are </p>
+
+    </div>
+    <script>
+         async function  signup(){
+            const res=await axios.post("http://localhost:3001/signup",{
+                email:document.getElementById("email-signup").value,
+                password:document.getElementById("password-signup").value
+            })
+            alert("signup success")
+        }
+
+        async function signin(){
+            const res=await axios.post("http://localhost:3001/signin",{
+                email:document.getElementById("email-signin").value,
+                password:document.getElementById("password-signin").value
+            })
+            localStorage.setItem("token",res.data.token)
+            alert("signin success")
+            getuser()
+        }
+        async function getuser(){
+            const res=await axios.get("http://localhost:3001/user",{
+                headers:{
+                    token:localStorage.getItem("token")
+                }
+        })
+        document.getElementById("user-details").innerHTML="user name and password are "+res.data.email+"password"+res.data.password;
+    }
+
+    </script>
+    
+</body>
+</html>
